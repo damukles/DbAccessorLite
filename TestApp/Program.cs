@@ -8,14 +8,20 @@ namespace DbAccessorLite.Nano.TestApp
 {
     class Program
     {
-        static void Main(string[] args) => MainAsync(args).GetAwaiter().GetResult();
-        static async Task MainAsync(string[] args)
-        {
-            // var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Test;Trusted_Connection=True;";
-            var connectionStringMySql = "Server=localhost;Database=Test;Uid=root;Pwd=123456;";
+        static readonly string _connectionString = "Server=localhost;Database=Test;Uid=root;Pwd=123456;";
+        // static readonly string _connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Test;Trusted_Connection=True;";
 
-            // var db = new DbAccessorNano(connectionString);
-            var db = new DbAccessorNano(connectionStringMySql, (cs) => new MySql.Data.MySqlClient.MySqlConnection(cs));
+        static void Main(string[] args)
+        {
+            TestNano();
+            TestMicro().GetAwaiter().GetResult();
+        }
+
+        static void TestNano()
+        {
+
+            // var db = new DbAccessorNano(_connectionString);
+            var db = new DbAccessorNano(_connectionString, (cs) => new MySql.Data.MySqlClient.MySqlConnection(cs));
             DataTable table = db.Query("select * from Persons");
             IEnumerable<string> names = table.GetColumnValues("Name");
 
@@ -30,15 +36,17 @@ namespace DbAccessorLite.Nano.TestApp
                 var nameField = row["Name"];
                 Console.WriteLine(String.Join(", ", new string[] { idField, nameField }));
             }
+        }
 
-
-            // var db2 = new DbAccessorMicro(connectionString);
-            var db2 = new DbAccessorMicro(connectionStringMySql, (cs) => new MySql.Data.MySqlClient.MySqlConnection(cs));
+        static async Task TestMicro()
+        {
+            // var db = new DbAccessorMicro(_connectionString);
+            var db = new DbAccessorMicro(_connectionString, (cs) => new MySql.Data.MySqlClient.MySqlConnection(cs));
             Console.WriteLine("=== async Person insert ===");
-            var insertedCount = await db2.ExecuteAsync("insert into Persons (Name, City) values ('Kurt', 'Züri')");
+            var insertedCount = await db.ExecuteAsync("insert into Persons (Name, City) values ('Kurt', 'Züri')");
             Console.WriteLine($"Inserted row count: {insertedCount}");
 
-            var persons = await db2.QueryAsync<Person>("select * from Persons");
+            var persons = await db.QueryAsync<Person>("select * from Persons");
             Console.WriteLine("=== async Person class Mappings ===");
             foreach (var person in persons)
             {
