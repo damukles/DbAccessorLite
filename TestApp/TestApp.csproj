@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DbAccessorLite.Micro\DbAccessorLite.Micro.csproj" />
     <ProjectReference Include="..\DbAccessorLite.Nano\DbAccessorLite.Nano.csproj" />
+    <ProjectReference Include="..\DbAccessorLite.Migrations\DbAccessorLite.Migrations.csproj" />
   </ItemGroup>
 
 </Project>
