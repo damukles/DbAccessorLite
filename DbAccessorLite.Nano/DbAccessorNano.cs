@@ -66,10 +66,12 @@ namespace DbAccessorLite.Nano
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = query;
-                    var reader = cmd.ExecuteReader();
-                    DataTable tbl = new DataTable();
-                    tbl.Load(reader);
-                    return tbl;
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        DataTable tbl = new DataTable();
+                        tbl.Load(reader);
+                        return tbl;
+                    }
                 }
             }
         }
@@ -85,10 +87,12 @@ namespace DbAccessorLite.Nano
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = query;
-                    var reader = await cmd.ExecuteReaderAsync();
-                    DataTable tbl = new DataTable();
-                    tbl.Load(reader);
-                    return tbl;
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        DataTable tbl = new DataTable();
+                        tbl.Load(reader);
+                        return tbl;
+                    }
                 }
             }
         }
