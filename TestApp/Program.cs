@@ -28,13 +28,14 @@ namespace DbAccessorLite.Nano.TestApp
             Console.WriteLine("=== All fields in Name Column ===");
             Console.WriteLine(String.Join(", ", names));
 
-            IEnumerable<Row> rows = table.GetRows(new string[] { "Id", "Name" });
+            IEnumerable<Row> rows = table.GetRows(new string[] { "Id", "Name", "Age" });
             Console.WriteLine("=== Some Fields of all Rows ===");
             foreach (var row in rows)
             {
                 var idField = row["Id"];
                 var nameField = row["Name"];
-                Console.WriteLine(String.Join(", ", new string[] { idField, nameField }));
+                var ageField = row["Age"];
+                Console.WriteLine(String.Join(", ", new string[] { idField, nameField, ageField }));
             }
         }
 

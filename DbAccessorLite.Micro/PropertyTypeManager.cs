@@ -29,5 +29,12 @@ namespace DbAccessorLite.Micro
                     return colValue;
             }
         }
+
+        internal bool CanBeAssignedNull(PropertyInfo matchedProperty)
+        {
+            return matchedProperty.PropertyType == typeof(string)
+                || !matchedProperty.PropertyType.IsValueType
+                || Nullable.GetUnderlyingType(matchedProperty.PropertyType) != null;
+        }
     }
 }

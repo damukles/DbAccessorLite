@@ -23,15 +23,25 @@ namespace DbAccessorLite.Micro
                 foreach (DataColumn col in table.Columns)
                 {
                     var matchedProperty = typeManager.FindProperty(col.ColumnName);
-                    if (matchedProperty != default(PropertyInfo))
+                    if (matchedProperty == default(PropertyInfo))
+                        continue;
+
+                    var rawColValue = row[col.ColumnName];
+                    if (rawColValue == null)
+                        continue;
+
+                    if (rawColValue.GetType() == typeof(System.DBNull))
                     {
-                        var rawColValue = row[col.ColumnName];
-                        if (rawColValue != null)
+                        if (!typeManager.CanBeAssignedNull(matchedProperty))
                         {
-                            var colValue = typeManager.TidyUpValue(rawColValue, matchedProperty.PropertyType);
-                            matchedProperty.SetValue(entity, colValue);
+                            throw new NoNullAllowedException($"Property {matchedProperty.Name} does not allow null.");
                         }
+                        continue;
                     }
+
+                    var colValue = typeManager.TidyUpValue(rawColValue, matchedProperty.PropertyType);
+                    matchedProperty.SetValue(entity, colValue);
+
                 }
                 yield return entity;
             }
