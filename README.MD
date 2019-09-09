@@ -33,7 +33,7 @@ IEnumerable<Person> persons = await db.QueryAsync<Person>("select * from Persons
 
 - [x] Async Support
 - [x] Decide for a mode => Nano and Micro
-- [x] Support for MySql => DbConnection with DbConnectionFactory
+- [x] Support for MSSQL and MySql => DbConnection with DbConnectionFactory
 - [ ] Escape user input (with sql variables?)
 - [ ] Migrations
 - [ ] Joins, Object Relations
