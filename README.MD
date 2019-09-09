@@ -34,7 +34,8 @@ IEnumerable<Person> persons = await db.QueryAsync<Person>("select * from Persons
 - [x] Async Support
 - [x] Decide for a mode => Nano and Micro
 - [x] Support for MySql => DbConnection with DbConnectionFactory
-- [ ] Migrations => in progress on migrations branch
+- [ ] Escape user input (with sql variables?)
+- [ ] Migrations
 - [ ] Joins, Object Relations
 - [ ] More Query Methods like QueryFirst, QuerySingle, etc. => let user just use linq on resulting IEnumerable?
 - [ ] Error Handling strategy => let user transparently handle SqlClient Exceptions?
