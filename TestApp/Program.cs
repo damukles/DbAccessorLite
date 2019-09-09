@@ -44,7 +44,7 @@ namespace DbAccessorLite.Nano.TestApp
             // var db = new DbAccessorMicro(_connectionString);
             var db = new DbAccessorMicro(_connectionString, (cs) => new MySql.Data.MySqlClient.MySqlConnection(cs));
             Console.WriteLine("=== async Person insert ===");
-            var insertedCount = await db.ExecuteAsync("insert into Persons (Name, City) values ('Kurt', 'Züri')");
+            var insertedCount = await db.ExecuteAsync("insert into Persons (Name, City, CompanyId) values ('Kurt', 'Züri', 1)");
             Console.WriteLine($"Inserted row count: {insertedCount}");
 
             var persons = await db.QueryAsync<Person>("select * from Persons");

@@ -9,39 +9,17 @@ namespace DbAccessorLite.Micro
     {
         public static IEnumerable<TEntity> ToEntities<TEntity>(this DataTable table) where TEntity : new()
         {
-            if (table.Rows == null || table.Rows.Count < 1)
-                throw new ArgumentOutOfRangeException(nameof(table.Rows), "Table contains no rows.");
-
             if (table.Columns == null || table.Columns.Count < 1)
                 throw new ArgumentOutOfRangeException(nameof(table.Rows), "Table contains no Columns.");
 
-            var typeManager = new PropertyTypeManager<TEntity>();
+            var mapper = new PropertyMapper<TEntity>();
 
             foreach (DataRow row in table.Rows)
             {
                 var entity = new TEntity();
                 foreach (DataColumn col in table.Columns)
                 {
-                    var matchedProperty = typeManager.FindProperty(col.ColumnName);
-                    if (matchedProperty == default(PropertyInfo))
-                        continue;
-
-                    var rawColValue = row[col.ColumnName];
-                    if (rawColValue == null)
-                        continue;
-
-                    if (rawColValue.GetType() == typeof(System.DBNull))
-                    {
-                        if (!typeManager.CanBeAssignedNull(matchedProperty))
-                        {
-                            throw new NoNullAllowedException($"Property {matchedProperty.Name} does not allow null.");
-                        }
-                        continue;
-                    }
-
-                    var colValue = typeManager.TidyUpValue(rawColValue, matchedProperty.PropertyType);
-                    matchedProperty.SetValue(entity, colValue);
-
+                    mapper.Map(row, col, entity);
                 }
                 yield return entity;
             }
