@@ -37,6 +37,3 @@ IEnumerable<Person> persons = await db.QueryAsync<Person>("select * from Persons
 - [ ] Escape user input (with sql variables?)
 - [ ] Migrations
 - [ ] Joins, Object Relations
-- [ ] More Query Methods like QueryFirst, QuerySingle, etc. => let user just use linq on resulting IEnumerable?
-- [ ] Error Handling strategy => let user transparently handle SqlClient Exceptions?
-- [ ] Case sensivity => yes/no?
